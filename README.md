@@ -1,1 +1,4 @@
-# Audio-Convolution
+# Audio Convolution Project Of Signals And Systems Lesson
+This Project İncludes : 
+  1- Convolution function that I wrote
+  2- Audio convolution with signal.convolve() and my myConv() functions
