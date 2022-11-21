@@ -4,6 +4,7 @@ import sounddevice as sd
 from scipy.io.wavfile import write
 from scipy import signal
 
+#   myConv() Function
 def myConv(valueX,valueY,x,y):
     arr = []
     if x == y:
@@ -37,6 +38,8 @@ def myConv(valueX,valueY,x,y):
     valueConv.append(0)
     valueConv.append(0)
     return valueConv
+#   myConv() Function
+
 menu = int(input("""1 - Convolution Functions
 2 - Convolution On Voice
 Make Your Choice:"""))
@@ -84,7 +87,7 @@ if(menu == 1):
     pyConvValue = signal.convolve(valueX, valueY, mode='full')    #HAZIR FONKSİYON
     print("Conv() Convolution Vector: " + str(pyConvValue) + '\n')
     
-#   MyConv Grafiği Yazma
+#   Plotting Graph of myConv()
     son = (convIndex[-1])+1
     bas = convIndex[0]
     n = np.arange(bas, son, 1)
@@ -96,9 +99,9 @@ if(menu == 1):
     plt.ylabel('x[n] * y[n]')
     plt.title('myConv() Convolution Func')
     plt.savefig("MyConv_Convolution.png")
-#   MyConv Grafiği Yazma
+#   Plotting Graph of myConv()
     plt.clf()
-#   Hazır Conv Grafiği Yazma
+#   Plotting Graph of signal.conv()
     son = (convIndex[-1])-1
     bas = convIndex[0]+2
     n = np.arange(bas, son, 1)
@@ -110,9 +113,9 @@ if(menu == 1):
     plt.ylabel('x[n] * y[n]')
     plt.title('Conv() Convolution Func')
     plt.savefig("Conv_Convolution.png")
-#   Hazır Conv Grafiği Yazma
+#   Plotting Graph of signal.conv()
     plt.clf()
-#   x[n] Grafiği Yazma
+#   Plotting the Graph of x[n]
     son = (indexX[-1])+1
     bas = indexX[0]
     n = np.arange(bas, son, 1)
@@ -124,9 +127,9 @@ if(menu == 1):
     plt.ylabel('x[n]')
     plt.title('x[n] Grafiği')
     plt.savefig("xn.png")
-#   x[n] Grafiği Yazma
+#   Plotting the Graph of x[n]
     plt.clf()
-#   y[n] Grafiği Yazma
+#   Plotting the Graph of y[n]
     son = (indexY[-1])+1
     bas = indexY[0]
     n = np.arange(bas, son, 1)
@@ -138,10 +141,10 @@ if(menu == 1):
     plt.ylabel('y[m]')
     plt.title('y[m] Grafiği')
     plt.savefig("ym.png")
-#   y[n] Grafiği Yazma
+#   Plotting the Graph of y[n] 
 elif(menu == 2):
     freq = 44100
-#   Ses Kaydı Başlangıcı
+#   Recording The Voice
     duration = int(input("5 Saniyelik mi 10 Saniyelik mi Ses Kaydetmek İstiyorsunuz ? : "))
     print("{} Saniyelik Ses Kaydı Başladı...".format(duration))
     recording = sd.rec(int(duration * freq),samplerate=freq, channels=2)
@@ -151,9 +154,9 @@ elif(menu == 2):
     for i in range(0,(int(duration/5)*220500)):
         recordingOneD.append(recording[i][1])
     recordingOneD = np.array(recordingOneD)
-#   Ses Kaydı Bitişi
+#   Recording The Voice
 
-#   h[n] Dizisini Oluşturma Başlangıcı
+#   Making the h[n] Array
     M = int(input("M Değerini Giriniz ( 2/3/4 ) :"))
     h = []
     zeroArr = []
@@ -170,27 +173,29 @@ elif(menu == 2):
         else:
             h.append(valueArr[i])
     h = np.array(h)
-#   h[n] Dizisini Oluşturma Bitişi
+#   Making the h[n] Array
 
-#   Hazır Konvolüsyon Fonksiyonu İle İşlem Yapma Başlangıcı
-    pyConvValue = signal.convolve(recordingOneD, h, mode='full')  #HAZIR FONKSİYON
+#   Convolving with signal.convolve()
+    pyConvValue = signal.convolve(recordingOneD, h, mode='full')
     print(pyConvValue)    
     pyConvValue = np.array(pyConvValue)
     pyConvValue = np.float32(pyConvValue)
     print("Hazır Konvolüsyon Fonksiyonunun Çıktısı Seslendiriliyor...")
     sd.play(pyConvValue, blocking=True)
-#   Hazır Konvolüsyon Fonksiyonu İle İşlem Yapma Bitişi
+#   Convolving with signal.convolve()
 
-#   Kendi Yazdığım Konvolüsyon İle İşlem Yapma Başlangıcı
+#   Convolving with myConv()
     print("Kendi Yazdığım Konvolüsyon Fonksiyonunun Çıktısı Hazırlanıyor")
     myConvValue = myConv(recordingOneD,h,len(recording),len(h))
     myConvValue = np.array(myConvValue)
     myConvValue = np.float32(myConvValue)
     print("Kendi Yazdığım Konvolüsyon Fonksiyonunun Çıktısı Seslendiriliyor...")
     sd.play(myConvValue, blocking=True)
-#   Kendi Yazdığım Konvolüsyonun Çıktısını Kaydediyorum
+#   Convolving with myConv()
+
+#   Saving myConv() Record
     write('MyConv.wav',freq,pyConvValue)
-#   Hazır Konvolüsyonun Çıktısını Kaydediyorum
+#   Saving signal.convolve() Record
     write('HazırConv.wav',freq,pyConvValue)
 else:
     pass
